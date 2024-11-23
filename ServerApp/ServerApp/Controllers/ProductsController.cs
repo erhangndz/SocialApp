@@ -40,8 +40,8 @@ namespace ServerApp.Controllers
             {
                 Name = model.Name,
                 IsActive = model.IsActive,
-                Price = model.Price,
-                Secret = model.Secret
+                Price = model.Price
+                
             });
             await _context.SaveChangesAsync();
             return Ok(model);
@@ -52,10 +52,11 @@ namespace ServerApp.Controllers
         {
             _context.Update(new Product
             {
+                Id=model.Id,
                 Name = model.Name,
                 IsActive = model.IsActive,
-                Price = model.Price,
-                Secret = model.Secret
+                Price = model.Price
+                
             });
             await _context.SaveChangesAsync();
             return Ok(model);
