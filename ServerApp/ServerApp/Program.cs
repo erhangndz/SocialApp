@@ -11,6 +11,8 @@ builder.Services.AddDbContext<SocialContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
 });
 
+builder.Services.AddIdentity<AppUser,AppRole>().AddEntityFrameworkStores<SocialContext>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("SocialApp", builder =>
@@ -39,6 +41,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("SocialApp");
 app.MapControllers();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseHttpsRedirection();
 
 

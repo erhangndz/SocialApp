@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ServerApp.Models;
 
 namespace ServerApp.Context
 {
-    public class SocialContext : DbContext
+    public class SocialContext : IdentityDbContext<AppUser,AppRole,int>
     {
         public SocialContext(DbContextOptions options):base(options){}
 
