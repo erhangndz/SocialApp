@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.EntityFrameworkCore;
 using ServerApp.Context;
-using ServerApp.Dtos;
+using ServerApp.Dtos.ProductDtos;
 using ServerApp.Models;
 using System.Runtime.CompilerServices;
 

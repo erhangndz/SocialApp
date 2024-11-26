@@ -3,13 +3,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ServerApp.Dtos.UserDtos;
 using ServerApp.Models;
+using ServerApp.Services;
 
 namespace ServerApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController(UserManager<AppUser> _userManager, SignInManager<AppUser> _signInManager) : ControllerBase
+    public class UsersController(UserManager<AppUser> _userManager, SignInManager<AppUser> _signInManager,TokenService _tokenService) : ControllerBase
     {
+
+
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(CreateUserDto model)
         {
@@ -44,7 +48,15 @@ namespace ServerApp.Controllers
                 return BadRequest("Email or Password incorrect!");
             }
 
-            return Ok("Login Successful");
+
+            return Ok(new
+            {
+                token = _tokenService.GenerateJwtToken(user),
+                userName= user.UserName,
+                id= user.Id,
+                email = user.Email,
+              
+            });
         }
     }
 }

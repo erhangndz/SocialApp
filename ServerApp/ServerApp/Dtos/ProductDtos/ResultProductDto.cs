@@ -1,10 +1,10 @@
-﻿namespace ServerApp.Dtos
+﻿namespace ServerApp.Dtos.ProductDtos
 {
-    public class CreateProductDto
+    public class ResultProductDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
         public bool IsActive { get; set; }
-      
     }
 }
