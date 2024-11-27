@@ -9,7 +9,7 @@ namespace ServerApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController(UserManager<AppUser> _userManager, SignInManager<AppUser> _signInManager,TokenService _tokenService) : ControllerBase
+    public class UsersController(UserManager<AppUser> _userManager, SignInManager<AppUser> _signInManager,ITokenService _tokenService) : ControllerBase
     {
 
 
@@ -48,15 +48,8 @@ namespace ServerApp.Controllers
                 return BadRequest("Email or Password incorrect!");
             }
 
-
-            return Ok(new
-            {
-                token = _tokenService.GenerateJwtToken(user),
-                userName= user.UserName,
-                id= user.Id,
-                email = user.Email,
-              
-            });
+            var tokenResponse =await _tokenService.GenerateJwtToken(user);
+            return Ok(tokenResponse);
         }
     }
 }

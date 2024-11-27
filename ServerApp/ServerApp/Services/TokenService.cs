@@ -9,7 +9,7 @@ using System.Text;
 
 namespace ServerApp.Services
 {
-    public class TokenService
+    public class TokenService: ITokenService
     {
         private readonly JwtOptions _jwtOptions;
         private readonly UserManager<AppUser> _userManager;
@@ -20,11 +20,11 @@ namespace ServerApp.Services
             _userManager = userManager;
         }
 
-        public async Task<string> GenerateJwtToken(AppUser user)
+        public async Task<TokenResponse> GenerateJwtToken(AppUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtOptions.Key);
-            var userRoles = await _userManager.GetRolesAsync(user);
+            //var userRoles = await _userManager.GetRolesAsync(user);
 
 
 
@@ -36,7 +36,9 @@ namespace ServerApp.Services
                  {
                     new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                     new Claim(ClaimTypes.Name,user.UserName),
-                    new Claim(ClaimTypes.Role,userRoles.FirstOrDefault()),
+                    new Claim(ClaimTypes.Email,user.Email),
+                    new Claim("nameSurname",user.Name),
+                    //new Claim(ClaimTypes.Role,userRoles.FirstOrDefault()),
 
                  }),
                 Expires = DateTime.UtcNow.AddMinutes(_jwtOptions.ExpirationMinute),
@@ -46,8 +48,10 @@ namespace ServerApp.Services
             };
 
             var securityToken = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
-            var token = tokenHandler.WriteToken(securityToken);
-            return token;
+            var response = new TokenResponse();
+            response.Token = tokenHandler.WriteToken(securityToken);
+            response.Expiration = DateTime.Now.AddMinutes(_jwtOptions.ExpirationMinute);
+            return response;
             
         }
     }

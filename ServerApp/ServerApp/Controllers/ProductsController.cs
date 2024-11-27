@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,11 @@ namespace ServerApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsController(SocialContext _context) : ControllerBase
     {
 
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetProductsAsync()
         {
