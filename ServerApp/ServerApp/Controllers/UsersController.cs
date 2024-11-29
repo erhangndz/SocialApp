@@ -37,19 +37,34 @@ namespace ServerApp.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto model)
         {
+
+           
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                return NotFound("User not found");
+                return NotFound( "User not found" );
             }
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
             if (!result.Succeeded)
             {
-                return BadRequest("Email or Password incorrect!");
+                return BadRequest("Email or Password incorrect!" );
             }
 
             var tokenResponse =await _tokenService.GenerateJwtToken(user);
             return Ok(tokenResponse);
+        }
+
+
+
+        [HttpGet("getUserInfo")]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            if(user == null)
+            {
+                return NotFound("User Not Found");
+            }
+            return Ok(user);
         }
     }
 }

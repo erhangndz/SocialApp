@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ServerApp.Context;
 using ServerApp.Models;
 using ServerApp.Services;
 using ServerApp.Settings;
+using System.Net;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -73,6 +75,25 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseExceptionHandler(error =>
+    {
+        error.Run(async context =>
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.ContentType = "application/json";
+
+            var exception = context.Features.Get<IExceptionHandlerFeature>();
+            if (exception != null)
+            {
+                //loglama => 
+                await context.Response.WriteAsync(new ErrorDetails
+                {
+                    StatusCode = context.Response.StatusCode,
+                    Message = exception.Error.Message
+                }.ToString());
+            }
+        });
+    });
 }
 
 app.UseCors("SocialApp");
