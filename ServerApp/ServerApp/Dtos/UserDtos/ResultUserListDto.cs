@@ -1,13 +1,13 @@
 ﻿using ServerApp.Dtos.ImageDtos;
-using System.Reflection.PortableExecutable;
 
 namespace ServerApp.Dtos.UserDtos
 {
-    public class ResultUserDto
+    public class ResultUserListDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Gender { get; set; }
+      
 
         public int Age { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -17,6 +17,6 @@ namespace ServerApp.Dtos.UserDtos
         public string? About { get; set; }
         public string? Hobby { get; set; }
 
-        public List<ResultImageDto> Images { get; set; }
+        public ResultImageDto Image { get; set; }
     }
 }

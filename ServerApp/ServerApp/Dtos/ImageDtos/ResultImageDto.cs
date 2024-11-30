@@ -10,7 +10,7 @@ namespace ServerApp.Dtos.ImageDtos
         public string Description { get; set; }
         public DateTime DateAdded { get; set; }
         public bool IsProfile { get; set; }
-        public int UserId { get; set; }
+       
        
     }
 }

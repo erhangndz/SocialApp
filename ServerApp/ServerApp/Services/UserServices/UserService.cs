@@ -8,10 +8,10 @@ namespace ServerApp.Services.UserServices
 {
     public class UserService(SocialContext _context,IMapper _mapper) : IUserService
     {
-        public async Task<IEnumerable<ResultUserDto>> GetAllUsersAsync()
+        public async Task<IEnumerable<ResultUserListDto>> GetAllUsersAsync()
         {
          var users =  await _context.Users.Include(x=>x.Images).ToListAsync();
-            return _mapper.Map<List<ResultUserDto>>(users);
+            return _mapper.Map<List<ResultUserListDto>>(users);
         }
 
         public async Task<ResultUserDto> GetUserByIdAsync(int id)
