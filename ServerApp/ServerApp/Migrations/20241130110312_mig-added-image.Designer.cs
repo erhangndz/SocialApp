@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServerApp.Context;
 
@@ -11,9 +12,11 @@ using ServerApp.Context;
 namespace ServerApp.Migrations
 {
     [DbContext(typeof(SocialContext))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20241130110312_mig-added-image")]
+    partial class migaddedimage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

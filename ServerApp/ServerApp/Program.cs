@@ -1,18 +1,28 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ServerApp.Context;
+using ServerApp.Data;
 using ServerApp.Models;
+using ServerApp.Repositories;
 using ServerApp.Services;
+using ServerApp.Services.UserServices;
 using ServerApp.Settings;
 using System.Net;
+using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddDbContext<SocialContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
@@ -62,7 +72,10 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
 builder.Services.AddScoped<ITokenService,TokenService>();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -73,6 +86,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    var userManager = builder.Services.BuildServiceProvider().GetRequiredService<UserManager<AppUser>>();
+
+   
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseExceptionHandler(error =>
@@ -94,6 +110,7 @@ if (app.Environment.IsDevelopment())
             }
         });
     });
+    SeedDatabase.Seed(userManager).Wait();
 }
 
 app.UseCors("SocialApp");

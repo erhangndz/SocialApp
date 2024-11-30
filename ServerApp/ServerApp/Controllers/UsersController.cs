@@ -1,70 +1,34 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ServerApp.Dtos.UserDtos;
-using ServerApp.Models;
-using ServerApp.Services;
+using Microsoft.Extensions.FileProviders;
+using ServerApp.Services.UserServices;
 
 namespace ServerApp.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController(UserManager<AppUser> _userManager, SignInManager<AppUser> _signInManager,ITokenService _tokenService) : ControllerBase
+    public class UsersController(IUserService _userService) : ControllerBase
     {
 
-
-
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(CreateUserDto model)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(int id)
         {
-            var user = new AppUser
-            {
-                Name = model.Name,
-                Email = model.Email,
-                BirthDate = model.BirthDate,
-                Gender = model.Gender,
-                UserName = model.UserName
-            };
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if(!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            return Ok(model);
-        }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto model)
-        {
-
-           
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                return NotFound( "User not found" );
-            }
-            var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
-            if (!result.Succeeded)
-            {
-                return BadRequest("Email or Password incorrect!" );
-            }
-
-            var tokenResponse =await _tokenService.GenerateJwtToken(user);
-            return Ok(tokenResponse);
-        }
-
-
-
-        [HttpGet("getUserInfo")]
-        public async Task<IActionResult> GetUserInfo()
-        {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var user = await _userService.GetUserByIdAsync(id);
             if(user == null)
             {
                 return NotFound("User Not Found");
             }
             return Ok(user);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await _userService.GetAllUsersAsync();
+            return Ok(users);
+        }
     }
 }
+

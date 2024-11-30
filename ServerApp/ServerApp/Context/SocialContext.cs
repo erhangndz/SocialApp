@@ -9,5 +9,6 @@ namespace ServerApp.Context
         public SocialContext(DbContextOptions options):base(options){}
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<Image> Images { get; set; }
     }
 }
