@@ -20,5 +20,12 @@ namespace ServerApp.Services.UserServices
 
             return _mapper.Map<ResultUserDto>(user);
         }
+
+        public async Task<bool> UpdateUserAsync(UpdateUserDto model)
+        {
+            var updateModel = _mapper.Map<AppUser>(model);
+            _context.Users.Update(updateModel);
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

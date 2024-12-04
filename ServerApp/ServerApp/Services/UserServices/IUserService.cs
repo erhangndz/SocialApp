@@ -7,5 +7,7 @@ namespace ServerApp.Services.UserServices
     {
         Task<ResultUserDto> GetUserByIdAsync(int id);
         Task<IEnumerable<ResultUserListDto>> GetAllUsersAsync();
+
+        Task<bool> UpdateUserAsync(UpdateUserDto model);
     }
 }

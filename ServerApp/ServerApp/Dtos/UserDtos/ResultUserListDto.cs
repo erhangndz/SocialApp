@@ -16,6 +16,7 @@ namespace ServerApp.Dtos.UserDtos
         public string? Country { get; set; }
         public string? About { get; set; }
         public string? Hobby { get; set; }
+        public string? ProfileImage { get; set; }
 
         public ResultImageDto Image { get; set; }
     }
