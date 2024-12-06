@@ -21,9 +21,10 @@ namespace ServerApp.Services.UserServices
             return _mapper.Map<ResultUserDto>(user);
         }
 
-        public async Task<bool> UpdateUserAsync(UpdateUserDto model)
+        public async Task<bool> UpdateUserAsync(int id,UpdateUserDto model)
         {
-            var updateModel = _mapper.Map<AppUser>(model);
+            var user = await _context.Users.FindAsync(id);
+            var updateModel = _mapper.Map(model, user);
             _context.Users.Update(updateModel);
             return await _context.SaveChangesAsync() > 0;
         }

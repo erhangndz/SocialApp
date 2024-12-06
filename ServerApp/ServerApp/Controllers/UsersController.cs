@@ -32,16 +32,16 @@ namespace ServerApp.Controllers
             return Ok(users);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update(UpdateUserDto model)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id,UpdateUserDto model)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if(model.Id!=int.Parse(userId))
+            if(id!=Int32.Parse(userId))
             {
                 return BadRequest("Unauthorized Update Proccess");
             }
 
-            var succeed = await _userService.UpdateUserAsync(model);
+            var succeed = await _userService.UpdateUserAsync(id,model);
             if (!succeed)
             {
                 return BadRequest("User Update Fail");

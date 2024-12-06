@@ -1,4 +1,6 @@
-﻿namespace ServerApp.Dtos.UserDtos
+﻿using ServerApp.Dtos.ImageDtos;
+
+namespace ServerApp.Dtos.UserDtos
 {
     public class UpdateUserDto
     {
@@ -7,5 +9,8 @@
         public string? Country { get; set; }
         public string? About { get; set; }
         public string? Hobby { get; set; }
+       
+
+       
     }
 }
